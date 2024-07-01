@@ -11,6 +11,10 @@ public class BusTicket {
     private String startDate;
     private String price;
 
+    public BusTicket() {
+
+    }
+
     @Override
     public String toString() {
         return "BusTicket{" +
