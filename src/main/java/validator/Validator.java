@@ -9,6 +9,9 @@ import java.util.Map;
 
 public class Validator {
     static Map<String, Integer> violationsTypes = new HashMap<>();
+    public static final String PRICE_VIOLATION = "price";
+    public static final String START_DATE_VIOLATION = "startDate";
+    public static final String TICKET_TYPE_VIOLATION = "ticketType";
     static int totalNumOfValidTickets;
     static int totalNumOfTickets;
 
@@ -24,19 +27,18 @@ public class Validator {
             totalNumOfValidTickets++;
         }
         totalNumOfTickets++;
-
         return isTicketPriceValid && isValidTicketType && isValidStartDate;
     }
 
     public boolean validateTicketPrice(BusTicket ticket) {
         if (ticket.getPrice() == null) {
-            getViolations("price");
+            getViolations(PRICE_VIOLATION);
             return false;
         } else if (Integer.parseInt(ticket.getPrice()) == 0) {
-            getViolations("price");
+            getViolations(PRICE_VIOLATION);
             return false;
         } else if (Integer.parseInt(ticket.getPrice()) % 2 != 0) {
-            getViolations("price");
+            getViolations(PRICE_VIOLATION);
             return false;
         }
         return true;
@@ -44,13 +46,13 @@ public class Validator {
 
     public boolean validateTicketType(BusTicket ticket) {
         if (ticket.getTicketType() == null) {
-            getViolations("ticketType");
+            getViolations(TICKET_TYPE_VIOLATION);
             return false;
         } else if (!Arrays.asList("DAY", "WEEK", "MONTH", "YEAR").toString().contains(ticket.getTicketType())) {
-            getViolations("ticketType");
+            getViolations(TICKET_TYPE_VIOLATION);
             return false;
         } else if (ticket.getTicketType().isEmpty()) {
-            getViolations("ticketType");
+            getViolations(TICKET_TYPE_VIOLATION);
             return false;
         }
         return true;
@@ -58,20 +60,20 @@ public class Validator {
 
     public boolean validateTicketDate(BusTicket ticket) {
         if (ticket.getStartDate() == null) {
-            getViolations("startDate");
+            getViolations(START_DATE_VIOLATION);
             return false;
         } else if (ticket.getStartDate().isEmpty()) {
-            getViolations("startDate");
+            getViolations(START_DATE_VIOLATION);
             return false;
         } else if (LocalDate.parse(ticket.getStartDate()).isAfter(LocalDate.now())) {
-            getViolations("startDate");
+            getViolations(START_DATE_VIOLATION);
             return false;
         }
         return true;
     }
 
     public void getPopularViolation() {
-        int maxCount = Integer.MIN_VALUE;
+        int maxCount = 0;
         String maxViolations = " ";
         for (Map.Entry<String, Integer> popularViolations : violationsTypes.entrySet()) {
             if (maxCount < popularViolations.getValue()) {
